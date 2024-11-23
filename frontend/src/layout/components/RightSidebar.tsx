@@ -14,7 +14,6 @@ const RightSidebar = () => {
     if (user && users.length !== 0) fetchUsers();
   }, [users, fetchUsers]);
 
-  console.log(users);
   return (
     <div className="flex flex-col h-full rounded-lg bg-zinc-900">
       <div className="flex items-center justify-between p-4 border-b border-zinc-800">
