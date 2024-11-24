@@ -7,9 +7,21 @@ import { Outlet } from "react-router-dom";
 import LeftSidebar from "./components/LeftSidebar";
 import RightSidebar from "./components/RightSidebar";
 import AudioPlayer from "./components/AudioPlayer";
+import PlaybackControls from "./components/PlaybackControls";
+import { useEffect, useState } from "react";
 
 const MainLayout = () => {
-  const isMobile = false;
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   return (
     <div className="flex flex-col h-screen text-white bg-black">
       <ResizablePanelGroup
@@ -25,23 +37,31 @@ const MainLayout = () => {
           <LeftSidebar />
         </ResizablePanel>
         <ResizableHandle className="w-2 transition-colors bg-black rounded-lg" />
+
         {/* Main Content Outlet*/}
         <ResizablePanel defaultSize={isMobile ? 80 : 60}>
           <Outlet />
         </ResizablePanel>
-        <ResizableHandle className="w-2 transition-colors bg-black rounded-lg" />
 
         {/* Right Sidebar */}
-        <ResizablePanel
-          defaultSize={20}
-          minSize={0}
-          maxSize={25}
-          collapsedSize={0}
-        >
-          <RightSidebar />
-        </ResizablePanel>
+        {!isMobile && (
+          <>
+            <ResizableHandle className="w-2 transition-colors bg-black rounded-lg" />
+
+            <ResizablePanel
+              defaultSize={20}
+              minSize={0}
+              maxSize={25}
+              collapsedSize={0}
+            >
+              <RightSidebar />
+            </ResizablePanel>
+          </>
+        )}
         <AudioPlayer />
       </ResizablePanelGroup>
+
+      <PlaybackControls />
     </div>
   );
 };
