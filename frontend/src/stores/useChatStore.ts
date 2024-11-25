@@ -35,7 +35,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   users: [],
   isLoading: false,
   error: null,
-  socket: null,
+  socket: socket,
   isConnected: false,
   onlineUsers: new Set(),
   userActivities: new Map(),
@@ -46,7 +46,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await axiosInstance.get("/users");
-      if (response) set({ users: response.data.users });
+      set({ users: response.data.users });
     } catch (error: any) {
       set({ error: error.response.data.message });
     } finally {
