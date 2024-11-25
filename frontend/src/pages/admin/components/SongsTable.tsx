@@ -11,7 +11,15 @@ import { useMusicStore } from "@/stores/useMusicStore";
 import { Calendar, Trash2 } from "lucide-react";
 
 const SongsTable = () => {
-  const { songs, isLoading, error, deleteSong } = useMusicStore();
+  const {
+    songs,
+    isLoading,
+    error,
+    deleteSong,
+    fetchSongs,
+    fetchAlbums,
+    fetchStats,
+  } = useMusicStore();
 
   if (isLoading) {
     return (
@@ -64,7 +72,15 @@ const SongsTable = () => {
                   variant={"ghost"}
                   size={"sm"}
                   className="text-red-400 hover:text-red-300 hover:bg-red-400/10"
-                  onClick={() => deleteSong(song._id)}
+                  onClick={() => {
+                    deleteSong(song._id);
+                    const timer = setTimeout(() => {
+                      fetchSongs();
+                      fetchAlbums();
+                      fetchStats();
+                    }, 3000);
+                    return () => clearTimeout(timer);
+                  }}
                 >
                   <Trash2 className="size-4" />
                 </Button>
