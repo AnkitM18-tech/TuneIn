@@ -11,7 +11,11 @@ const Header = () => {
   return (
     <div className="sticky top-0 z-10 flex items-center justify-between p-4 rounded-md bg-zinc-900/75 backdrop-blur-md">
       <div className="flex items-center gap-2">
-        <img src={"/tunein.png"} alt={"Tune In Logo"} className="size-8" />
+        <img
+          src={"/tunein.png"}
+          alt={"Tune In Logo"}
+          className="rounded-full size-8"
+        />
         TuneIn
       </div>
       <div className="flex items-center gap-4">
