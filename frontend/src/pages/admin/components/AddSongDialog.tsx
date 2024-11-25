@@ -240,7 +240,17 @@ const AddSongDialog = () => {
           >
             Cancel
           </Button>
-          <Button onClick={handleSubmit} disabled={isLoading}>
+          <Button
+            onClick={handleSubmit}
+            disabled={
+              isLoading ||
+              !newSong.title ||
+              !newSong.artist ||
+              !newSong.duration ||
+              !files.image ||
+              !files.audio
+            }
+          >
             {isLoading ? "Uploading..." : "Add Song"}
           </Button>
         </DialogFooter>
