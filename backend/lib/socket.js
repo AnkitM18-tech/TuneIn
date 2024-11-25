@@ -56,9 +56,9 @@ export const initializeSocket = (server) => {
           userActivities.delete(userId);
           break;
         }
-      }
-      if (disconnectUserId) {
-        io.emit("user_disconnected", disconnectedUserId);
+        if (disconnectedUserId) {
+          io.emit("user_disconnected", disconnectedUserId);
+        }
       }
     });
   });
