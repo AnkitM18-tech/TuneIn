@@ -111,6 +111,15 @@ export const deleteAlbum = async (req, res, next) => {
     const imagePublicId = album.imageUrl.split("/").pop().split(".")[0];
     await deleteFromCloudinary(imagePublicId, "image");
 
+    const songs = await Song.find({ albumId: id });
+    songs.map(async (song) => {
+      const audioPublicId = song.audioUrl.split("/").pop().split(".")[0];
+      const imagePublicId = song.imageUrl.split("/").pop().split(".")[0];
+
+      await deleteFromCloudinary(imagePublicId, "image");
+      await deleteFromCloudinary(audioPublicId, "video");
+    });
+
     await Song.deleteMany({ albumId: id });
     await Album.findByIdAndDelete(id);
     return res.status(200).json({
