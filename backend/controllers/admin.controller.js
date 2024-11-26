@@ -1,6 +1,6 @@
 import { Song } from "../models/song.models.js";
 import { Album } from "../models/album.models.js";
-import { uploadToCloudinary } from "../lib/cloudinary.js";
+import { deleteFromCloudinary, uploadToCloudinary } from "../lib/cloudinary.js";
 
 export const createSong = async (req, res, next) => {
   try {
@@ -59,6 +59,11 @@ export const deleteSong = async (req, res, next) => {
         },
       });
     }
+    const audioPublicId = song.audioUrl.split("/").pop().split(".")[0];
+    const imagePublicId = song.imageUrl.split("/").pop().split(".")[0];
+
+    await deleteFromCloudinary(imagePublicId, "image");
+    await deleteFromCloudinary(audioPublicId, "video");
 
     await Song.findByIdAndDelete(id);
 
@@ -101,6 +106,11 @@ export const createAlbum = async (req, res, next) => {
 export const deleteAlbum = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const album = await Album.findById(id);
+
+    const imagePublicId = album.imageUrl.split("/").pop().split(".")[0];
+    await deleteFromCloudinary(imagePublicId, "image");
+
     await Song.deleteMany({ albumId: id });
     await Album.findByIdAndDelete(id);
     return res.status(200).json({
